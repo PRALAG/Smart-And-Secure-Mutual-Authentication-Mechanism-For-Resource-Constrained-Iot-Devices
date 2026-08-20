@@ -1,0 +1,25 @@
+module fault_detector(
+    input            clk,
+    input            reset,
+    input            trigger,
+    output reg       AUTH_LOCKOUT,
+    output reg [2:0] fail_count
+);
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            fail_count   <= 3'd0;
+            AUTH_LOCKOUT <= 1'b0;
+        end
+        else if (!AUTH_LOCKOUT) begin
+            if (trigger) begin
+                if (fail_count == 3'd2) begin
+                    fail_count   <= 3'd3;
+                    AUTH_LOCKOUT <= 1'b1;
+                end
+                else begin
+                    fail_count   <= fail_count + 1;
+                end
+            end
+        end
+    end
+endmodule

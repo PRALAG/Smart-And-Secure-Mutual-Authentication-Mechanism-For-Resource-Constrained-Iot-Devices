@@ -1,0 +1,19 @@
+module multifunction_circuit(
+    input  [15:0]     X,
+    input  [15:0]     Y,
+    input             SL1,
+    input             SL2,
+    input             ADD_SUB,
+    output reg [19:0] Z
+);
+    always @(*) begin
+        case ({SL1, SL2})
+            2'b00: Z = ADD_SUB ?
+                       ({4'b0000,X} + {4'b0000,Y}) :
+                       ({4'b0000,X} - {4'b0000,Y});
+            2'b01: Z = {X, 4'b0000} | {4'b0000, Y};
+            2'b10: Z = {4'b0000,X}  ^ {4'b0000,Y};
+            2'b11: Z = ({4'b0000,X} + {4'b0000,Y}) ^ {4'b0000,Y};
+        endcase
+    end
+endmodule

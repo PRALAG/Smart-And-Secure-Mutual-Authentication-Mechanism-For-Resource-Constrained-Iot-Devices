@@ -1,0 +1,11 @@
+module dynamic_sl_gen(
+    input  [63:0] RNT,
+    input  [63:0] RNR,
+    output        SL1,
+    output        SL2,
+    output        ADD_SUB
+);
+    assign SL1     = RNT[7]  ^ RNR[31];
+    assign SL2     = RNT[15] ^ RNR[47];
+    assign ADD_SUB = RNT[23] ^ RNR[55];
+endmodule

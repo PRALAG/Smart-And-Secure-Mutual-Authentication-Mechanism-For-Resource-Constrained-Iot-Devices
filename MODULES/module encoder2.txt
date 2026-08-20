@@ -1,0 +1,23 @@
+module encoder(
+    input  [31:0]  PWD,
+    input  [63:0]  RN,
+    input          SL1,
+    input          SL2,
+    output [19:0]  EN_PWD
+);
+    wire [31:0] IE1 = PWD ^ RN[31:0];
+    wire [31:0] IE2 = PWD ^ RN[63:32];
+    wire [15:0] IE3 = IE1[31:16] ^ IE2[15:0];
+    wire [15:0] IE4 = IE2[31:16] ^ IE1[15:0];
+    wire [15:0] IE5 = PWD[31:16] ^ IE3;
+    wire [15:0] IE6 = PWD[15:0]  ^ IE4;
+
+    multifunction_circuit mfc(
+        .X      (IE5),
+        .Y      (IE6),
+        .SL1    (SL1),
+        .SL2    (SL2),
+        .ADD_SUB(RN[0]),
+        .Z      (EN_PWD)
+    );
+endmodule
